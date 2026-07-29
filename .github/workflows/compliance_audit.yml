@@ -20,10 +20,20 @@ jobs:
         run: |
           source ~/ans-labs/ans-env/bin/activate
           ansible-playbook check_vcenter.yml \
-            -e "vcenter_hostname=vcenter.mhy.com" \
-            -e "vcenter_admin_user=administrator@vsphere.local" \
-            -e "vcenter_admin_pass=Admin@1234" \
-            -e "hostname=vcenter.mhy.com" \
-            -e "username=administrator@vsphere.local" \
-            -e "password=Admin@1234" \
+            -e "vcenter_hostname=${{ secrets.VCENTER_HOSTNAME }}" \
+            -e "vcenter_admin_user=${{ secrets.VCENTER_USERNAME }}" \
+            -e "vcenter_admin_pass=${{ secrets.VCENTER_PASSWORD }}" \
+            -e "hostname=${{ secrets.VCENTER_HOSTNAME }}" \
+            -e "username=${{ secrets.VCENTER_USERNAME }}" \
+            -e "password=${{ secrets.VCENTER_PASSWORD }}" \
             -e "validate_certs=false"
+        # run: |
+        #   source ~/ans-labs/ans-env/bin/activate
+        #   ansible-playbook check_vcenter.yml \
+        #     -e "vcenter_hostname=vcenter.mhy.com" \
+        #     -e "vcenter_admin_user=administrator@vsphere.local" \
+        #     -e "vcenter_admin_pass=Admin@1234" \
+        #     -e "hostname=vcenter.mhy.com" \
+        #     -e "username=administrator@vsphere.local" \
+        #     -e "password=Admin@1234" \
+        #     -e "validate_certs=false"
