@@ -10,6 +10,7 @@ jobs:
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
+
       - name: Test Secrets Connection
         env:
           TEST_HOST: ${{ secrets.VCENTER_HOSTNAME }}
@@ -20,16 +21,9 @@ jobs:
           if [ -z "$TEST_HOST" ]; then echo "❌ VCENTER_HOSTNAME is EMPTY!"; else echo "✅ VCENTER_HOSTNAME is loaded: $TEST_HOST"; fi
           if [ -z "$TEST_USER" ]; then echo "❌ VCENTER_USERNAME is EMPTY!"; else echo "✅ VCENTER_USERNAME is loaded: $TEST_USER"; fi
           if [ -z "$TEST_PASS" ]; then echo "❌ VCENTER_PASSWORD is EMPTY!"; else echo "✅ VCENTER_PASSWORD is loaded: $TEST_PASS"; fi
-      # --------------------------------------
-      
+
       - name: Run Ansible Compliance Audit Playbook
         env:
-          # متغيرات البيئة العامة التي يقرأها موديل VMware تلقائياً
-          VMWARE_HOST: ${{ secrets.VCENTER_HOSTNAME }}
-          VMWARE_USER: ${{ secrets.VCENTER_USERNAME }}
-          VMWARE_PASSWORD: ${{ secrets.VCENTER_PASSWORD }}
-          VMWARE_VALIDATE_CERTS: "no"
-          # المتغيرات المخصصة باسم ملفك
           VCENTER_HOST: ${{ secrets.VCENTER_HOSTNAME }}
           VCENTER_USER: ${{ secrets.VCENTER_USERNAME }}
           VCENTER_PASS: ${{ secrets.VCENTER_PASSWORD }}
