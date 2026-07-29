@@ -16,6 +16,7 @@ jobs:
           VCENTER_HOST: ${{ secrets.VCENTER_HOSTNAME }}
           VCENTER_USER: ${{ secrets.VCENTER_USERNAME }}
           VCENTER_PASS: ${{ secrets.VCENTER_PASSWORD }}
+          VMWARE_VALIDATE_CERTS: "no"
         run: |
           source ~/ans-labs/ans-env/bin/activate
           ansible-playbook check_vcenter.yml \
