@@ -13,14 +13,17 @@ jobs:
 
       - name: Run Ansible Compliance Audit Playbook
         env:
-          VCENTER_HOST: ${{ secrets.VCENTER_HOSTNAME }}
-          VCENTER_USER: ${{ secrets.VCENTER_USERNAME }}
-          VCENTER_PASS: ${{ secrets.VCENTER_PASSWORD }}
+          VMWARE_HOST: "vcenter.mhy.com"
+          VMWARE_USER: "administrator@vsphere.local"
+          VMWARE_PASSWORD: "Admin@1234"
           VMWARE_VALIDATE_CERTS: "no"
         run: |
           source ~/ans-labs/ans-env/bin/activate
           ansible-playbook check_vcenter.yml \
-            -e "vcenter_hostname=$VCENTER_HOST" \
-            -e "vcenter_username=$VCENTER_USER" \
-            -e "vcenter_password=$VCENTER_PASS" \
+            -e "vcenter_hostname=vcenter.mhy.com" \
+            -e "vcenter_admin_user=administrator@vsphere.local" \
+            -e "vcenter_admin_pass=Admin@1234" \
+            -e "hostname=vcenter.mhy.com" \
+            -e "username=administrator@vsphere.local" \
+            -e "password=Admin@1234" \
             -e "validate_certs=false"
