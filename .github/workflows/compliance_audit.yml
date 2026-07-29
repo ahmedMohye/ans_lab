@@ -17,6 +17,7 @@ jobs:
           VCENTER_USER: ${{ secrets.VCENTER_USERNAME }}
           VCENTER_PASS: ${{ secrets.VCENTER_PASSWORD }}
         run: |
+          source ~/ans-labs/ans-env/bin/activate
           ansible-playbook check_vcenter.yml \
             -e "vcenter_hostname=$VCENTER_HOST" \
             -e "vcenter_username=$VCENTER_USER" \
