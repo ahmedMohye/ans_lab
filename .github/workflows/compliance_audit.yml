@@ -20,6 +20,9 @@ jobs:
         run: |
           source ~/ans-labs/ans-env/bin/activate
           ansible-playbook check_vcenter.yml \
+            -e "vcenter_hostname=vcenter.mhy.com" \
+            -e "vcenter_admin_user=administrator@vsphere.local" \
+            -e "vcenter_admin_pass=Admin@1234" \
             -e "hostname=vcenter.mhy.com" \
             -e "username=administrator@vsphere.local" \
             -e "password=Admin@1234" \
