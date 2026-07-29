@@ -1,0 +1,24 @@
+name: VMware Compliance Audit
+
+on:
+  workflow_dispatch:
+
+jobs:
+  audit:
+    runs-on: self-hosted
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Run Ansible Compliance Audit Playbook
+        env:
+          VCENTER_HOST: ${{ secrets.VCENTER_HOSTNAME }}
+          VCENTER_USER: ${{ secrets.VCENTER_USERNAME }}
+          VCENTER_PASS: ${{ secrets.VCENTER_PASSWORD }}
+        run: |
+          ansible-playbook check_vcenter.yml \
+            -e "vcenter_hostname=$VCENTER_HOST" \
+            -e "vcenter_username=$VCENTER_USER" \
+            -e "vcenter_password=$VCENTER_PASS" \
+            -e "validate_certs=false"
