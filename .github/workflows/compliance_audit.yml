@@ -23,7 +23,4 @@ jobs:
             -e "vcenter_hostname=vcenter.mhy.com" \
             -e "vcenter_admin_user=administrator@vsphere.local" \
             -e "vcenter_admin_pass=Admin@1234" \
-            # -e "hostname=vcenter.mhy.com" \
-            # -e "username=administrator@vsphere.local" \
-            # -e "password=Admin@1234" \
             -e "validate_certs=false"
