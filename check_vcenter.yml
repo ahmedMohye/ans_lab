@@ -1,0 +1,22 @@
+---
+- name: Verify Secure Connection to vCenter
+  hosts: localhost
+  gather_facts: false
+  vars:
+    vcenter_hostname: "vcenter.mhy.com"
+    vcenter_username: "svc_ansible@mhy.com"
+    vcenter_password: "Admin@1234"
+
+  tasks:
+    - name: Gather all Virtual Machines info
+      community.vmware.vmware_vm_info:
+        hostname: "{{ vcenter_hostname }}"
+        username: "{{ vcenter_username }}"
+        password: "{{ vcenter_password }}"
+        validate_certs: false  # تم تعيينها false مؤقتاً لتجاوز فحص الشهادة المحلية
+      register: vm_info
+
+    - name: Display VM Names found in vCenter
+      ansible.builtin.debug:
+        msg: "VM Name: {{ item.guest_name }} | Status: {{ item.power_state }}"
+      loop: "{{ vm_info.virtual_machines }}"

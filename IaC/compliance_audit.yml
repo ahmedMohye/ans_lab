@@ -1,0 +1,30 @@
+---
+- name: VMware Infrastructure Compliance Audit
+  hosts: localhost
+  gather_facts: no
+  vars:
+      hostname: "vcenter.mhy.com"
+      username: "svc_ansible@mhy.com"
+      password: "Admin@1234"
+  tasks:
+    - name: 1. Fetch ESXi Host Services Status
+      community.vmware.vmware_host_service_facts:
+        hostname: "{{ vcenter_hostname }}"
+        username: "{{ vcenter_username }}"
+        password: "{{ vcenter_password }}"
+        validate_certs: "{{ validate_certs | default(false) }}"
+      register: host_services
+
+    - name: 2. Check SSH Service Status on ESXi
+      ansible.builtin.set_fact:
+        ssh_status: "{{ host_services.service_facts.TSM.running }}"
+
+    - name: 3. Audit Report Output
+      ansible.builtin.debug:
+        msg:
+          - "=========================================="
+          - "       COMPLIANCE AUDIT RESULTS           "
+          - "=========================================="
+          - "ESXi SSH Service Running: {{ ssh_status }}"
+          - "Compliance Status: {{ 'NON-COMPLIANT (SSH IS OPEN!)' if ssh_status else 'COMPLIANT (SSH IS CLOSED)' }}"
+          - "=========================================="

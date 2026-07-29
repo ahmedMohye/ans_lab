@@ -1,0 +1,31 @@
+plugin: vmware.vmware.vms
+
+# بيانات الاتصال
+hostname: "vcenter.mhy.com"
+username: "svc_ansible@mhy.com"
+password: "Admin@1234"
+validate_certs: false
+
+# تعطيل جلب الـ Tags لتجنب طلب SDK
+gather_tags: false
+
+# تعيين اسم الـ VM الظاهر في vCenter كـ Hostname
+hostnames:
+  - config.name
+
+# -------------------------------------------------------------
+# قواعد التجميع الديناميكي (Keyed Groups)
+# -------------------------------------------------------------
+keyed_groups:
+  # 1. التجميع حسب المجلد (Folder)
+  - key: (path | split('/'))[-2]
+    prefix: "folder"
+    separator: "_"
+
+  # 2. التجميع حسب حالة التشغيل (Power State)
+  - key: summary.runtime.powerState
+    prefix: "power"
+    separator: "_"
+  - key: tags
+    prefix: ""
+    separator: ""

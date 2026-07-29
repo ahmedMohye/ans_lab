@@ -1,0 +1,7 @@
+plugin: community.vmware.vmware_vm_inventory
+strict: False
+hostname: "vcenter.mhy.com"
+username: "svc_ansible@mhy.com"
+password: "Admin@1234"
+validate_certs: false
+with_nested_properties: true

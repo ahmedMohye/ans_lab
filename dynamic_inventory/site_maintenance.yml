@@ -1,0 +1,17 @@
+---
+- name: Operations on Dynamic Inventory Groups (By Tag)
+  hosts: TestTag  # استهداف المجموعة المولّدة من الـ Tag المسمى TestTag
+  gather_facts: false
+
+  tasks:
+    - name: Ping VMs in TestTag Group
+      ansible.builtin.ping:
+
+- name: Manage Specific Folder VMs
+  hosts: folder_vm  # استهداف المجلد المسمى abdo-VMs
+  gather_facts: false
+
+  tasks:
+    - name: Display VM Name
+      ansible.builtin.debug:
+        msg: "Executing task on VM: {{ inventory_hostname }}"

@@ -1,0 +1,57 @@
+---
+- name: vSphere Infrastructure Automation via vCenter API
+  hosts: localhost
+  connection: local  # تنفّذ المهام من جهاز Ansible كـ API Client محلي
+  gather_facts: false
+  vars_files:
+    - vars/vault.yml
+
+  tasks:
+    # -------------------------------------------------------------
+    # 1. جلب معلومات الـ ESXi Host عبر vCenter (بدون SSH إلى ESXi)
+    # -------------------------------------------------------------
+    - name: Get ESXi Host facts via vCenter API
+      community.vmware.vmware_host_facts:
+        hostname: "{{ vcenter_hostname }}"
+        username: "{{ vcenter_username }}"
+        password: "{{ vcenter_password }}"
+        validate_certs: false
+        esxi_hostname: "esxi-lab.mhy.com"  # اسم الـ Host داخل vCenter
+      register: host_facts
+
+    - name: Display Host CPU and Memory info
+      ansible.builtin.debug:
+        msg: 
+          - "Host Model: {{ host_facts.ansible_facts.ansible_product_name }}"
+          - "Total CPU Cores: {{ host_facts.ansible_facts.ansible_processor_vcpus }}"
+          - "Memory Size (MB): {{ host_facts.ansible_facts.ansible_memtotal_mb }}"
+
+    # -------------------------------------------------------------
+    # 2. جلب وتفقد الأجهزة الافتراضية داخل Folder مخصص فقط
+    # -------------------------------------------------------------
+    - name: Gather Info for VMs in specific Folder
+      community.vmware.vmware_vm_info:
+        hostname: "{{ vcenter_hostname }}"
+        username: "{{ vcenter_username }}"
+        password: "{{ vcenter_password }}"
+        validate_certs: false
+        folder: "/{{ datacenter_name }}/vm/{{ target_folder }}"
+      register: folder_vms
+
+    - name: Display Found VMs
+      ansible.builtin.debug:
+        msg: "Found VM in Ansible Folder: {{ item.guest_name }}"
+      loop: "{{ folder_vms.virtual_machines }}"
+
+    # -------------------------------------------------------------
+    # 3. إدارة حالة تشغيل جهاز افتراضي (Power Management)
+    # -------------------------------------------------------------
+    - name: Ensure target VM is Powered On
+      community.vmware.vmware_guest_powerstate:
+        hostname: "{{ vcenter_hostname }}"
+        username: "{{ vcenter_username }}"
+        password: "{{ vcenter_password }}"
+        validate_certs: false
+        folder: "/{{ datacenter_name }}/vm/{{ target_folder }}"
+        name: "vm_Odoo"
+        state: powered-on
